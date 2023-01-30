@@ -1,7 +1,7 @@
 # Predicting CMBS Property Loss Due to Climate Physical Risk
 UC Berkeley MIDS - Spring '23 Capstone (w210 Sec. 3)
 
-**Contributors**: Aditya Dave, Finnian Meagher, Mrinalini Sharma, Andrew Bailey
+**Contributors**: Aditya Dave, Finnian Meagher, Mrinalini Sharma, Andrew Bailey, Esther (Yuqiao) Chen
 
 ## Problem Statement
 
