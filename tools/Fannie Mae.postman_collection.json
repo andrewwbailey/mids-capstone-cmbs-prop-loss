@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "2d416f0f-836b-45f3-8b7f-d8483614dc81",
+		"name": "Fannie Mae",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2729148"
+	},
+	"item": [
+		{
+			"name": "Generate Token",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Jb1PYBADgy_rj_PTUvAFEqBHafbcRsOR8KI-rhKMtcId4G9bfeeG2Cm9Pz~oTBNt",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "a3a8d9f9-8675-424c-af26-c43ee9863bde",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://auth.pingone.com/4c2b23f9-52b1-4f8f-aa1f-1d477590770c/as/token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"pingone",
+						"com"
+					],
+					"path": [
+						"4c2b23f9-52b1-4f8f-aa1f-1d477590770c",
+						"as",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HARP Data Pull",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-public-access-token",
+						"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImRlZmF1bHQifQ.eyJjbGllbnRfaWQiOiJhM2E4ZDlmOS04Njc1LTQyNGMtYWYyNi1jNDNlZTk4NjNiZGUiLCJpc3MiOiJodHRwczovL2F1dGgucGluZ29uZS5jb20vNGMyYjIzZjktNTJiMS00ZjhmLWFhMWYtMWQ0Nzc1OTA3NzBjL2FzIiwiaWF0IjoxNjc2MjYzMjMzLCJleHAiOjE2NzYyNjY4MzMsImF1ZCI6WyJEZXZlbG9wZXJQb3J0YWwiXSwic2NvcGUiOiJjbGllbnRjcmVkZW50aWFsIn0.PDrDL-io_IzNfDXJjegG9citGlkyUcM7THoRWHYWeHQUI8_DlLCSD2ZkwCNE8UMkd9sQMyhYIPpnPsRjFjBS9g_ofoBKAND6DZMCUu-kZdAG_O5qum7dlmJtSnng2oiCDUXBy88XD3tTovehhAp7ScrKbr4GgOeFGiOFZNhgEhS6myaZMKJ_GGgYTnVTImS_qnf8QivbZyrUO7PEIxUsJ4l5FS-8fy6_tQK0ngfB1L8i8W16BW_z0ThJ69YutBTnnxA_g6jqgUJqxDh1o4VQO97vm-yzbcdWuQfYwhe7UOjZZ38qsmu8XXUvn3oSaqgRA8y2xfxtd6zeN5Lzb-vVsw",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.fanniemae.com/v1/sf-loan-performance-data/harp-dataset",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fanniemae",
+						"com"
+					],
+					"path": [
+						"v1",
+						"sf-loan-performance-data",
+						"harp-dataset"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
