@@ -10,7 +10,7 @@ from shapely.geometry import Point
 
 OGC_DEGREE_TO_METERS = 6378137.0 * 2.0 * math.pi / 360
 
-app = Flask(__name__, template_folder='/Users/chenyuqiao/berkeley/w210/mids-capstone-cmbs-prop-loss/webpage/')
+app = Flask(__name__, template_folder='templates')
 
 # ol map https://openlayers.org/en/v5.3.0/examples/geojson.html
 # pip install hilbertcurve
@@ -156,4 +156,4 @@ def filter():
     return result
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
