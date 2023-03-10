@@ -1,0 +1,9 @@
+.sidebar {
+    float: left;
+    width: 20%;
+}
+.map {
+    height: 850px;
+    width: 77%;
+    float: right;
+}
