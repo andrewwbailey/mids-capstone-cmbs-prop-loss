@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/css/ol.css" type="text/css">
+      <style>
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+      </style>
+
+      <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/build/ol.js"></script>
+      <script src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.1.2/echarts.min.js"></script>
+      <title>OpenLayers Map</title>
+   </head>
+   <div class="sidebar">
+      <label>Year:</label>
+      <input type="text" name="year" value="2022" style="width: 150px;">
+      <label>Quarter:</label>
+      <input type="text" name="quarter" value="3" style="width: 150px;">
+      <input type="submit" onclick="query()" value="query">
+      <input type="submit" onclick="clearall()" value="clear">
+   </div>
+   <div id="map" class="map"></div>
+   <div id="chart" class="map"></div>
+   <script type="text/javascript">
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+           center: [-81,27],
+          zoom: 6,
+           projection:'EPSG:4326'
+        })
+      });
+      
+       const vectorSource = new ol.source.Vector({
+                });
+                const vectorLayer = new ol.layer.Vector({
+                    source: vectorSource,
+                     style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'gba(46, 204, 113, 1)',
+            width: 2
+          }),
+          image: new ol.style.Circle({
+            radius: 4,
+            fill: new ol.style.Fill({
+              color: 'rgba(46, 204, 113, 0.9)'
+            })
+          })
+        })
+          });
+         map.addLayer(vectorLayer);
+      
+         const vectorSource2 = new ol.source.Vector({
+                });
+                const vectorLayer2 = new ol.layer.Vector({
+                    source: vectorSource2,
+                      style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'red',
+            width: 2
+          }),
+          image: new ol.style.Circle({
+            radius: 4,
+            fill: new ol.style.Fill({
+              color: 'rgba(255, 0, 0, 0.9)'
+            })
+          })
+        })
+          });
+         map.addLayer(vectorLayer2);
+      
+      
+          const vectorSource3 = new ol.source.Vector({
+                });
+                const vectorLayer3 = new ol.layer.Vector({
+                    source: vectorSource3,
+                      style: new ol.style.Style({
+                       fill: new ol.style.Fill({
+            color: 'rgba(252, 214, 112, 0.4)'
+          }),
+          stroke: new ol.style.Stroke({
+            color: 'rgba(252, 214, 112, 1)',
+            width: 2
+          }),
+      
+        })
+          });
+         map.addLayer(vectorLayer3);
+      
+      
+      function queryHandler(data0) {
+           data = $.parseJSON(data0['greenhouse'])
+           data2 = $.parseJSON(data0['redhouse'])
+           data3 = $.parseJSON(data0['yellowhurricane'])
+           vectorSource.clear(true);
+           vectorSource.addFeatures(new ol.format.GeoJSON().readFeatures(data));
+      
+           vectorSource2.clear(true);
+           vectorSource2.addFeatures(new ol.format.GeoJSON().readFeatures(data2));
+      
+           vectorSource3.clear(true);
+           vectorSource3.addFeatures(new ol.format.GeoJSON().readFeatures(data3));
+      }
+      
+      function query() {
+      $.ajax({
+              url : '/filter?year='
+                + $("input[ name='year'] ").val()
+                + '&quarter='
+                + $("input[ name='quarter'] ").val(),
+              dataType : 'json',
+              success : queryHandler
+      });
+      
+      }
+      
+      function clearall() {
+        vectorSource.clear();
+        vectorSource.refresh();
+        
+        vectorSource2.clear();
+        vectorSource2.refresh();
+        
+        vectorSource3.clear();
+        vectorSource3.refresh();
+      }
+      
+      const selectStyle = new ol.style.Style({
+          text: new ol.style.Text(),
+           image: new ol.style.Circle({
+            radius: 4,
+            fill: new ol.style.Fill({
+              color: 'rgba(0, 0, 255, 0.9)'
+            })
+          })
+      });
+      
+      let selected = null;
+      map.on('pointermove', function (e) {
+        if (selected !== null) {
+          selected.setStyle(undefined);
+          selected = null;
+        }
+
+        map.forEachFeatureAtPixel(e.pixel, function (f) {
+          if (f.get('Address')==undefined)  return false;
+          selected = f;
+          selectStyle.getText().setText(f.get('Address'));
+          f.setStyle(selectStyle);
+          return true;
+        });
+      });
+      
+     var myChart = echarts.init(document.getElementById('chart'));
+
+      function joinHandler(data) {
+          var option = {
+            title : {
+              text : data.street + ',' + data.city + ','+ data.state
+            },
+            tooltip : {},
+            legend : {
+              data : [ "Effective Rent" ]
+            },
+            xAxis : {
+              data : data.xdata,
+              name: "Year-Quarter"
+            },
+            yAxis : {},
+            series : [ {
+              name : "Effective Rent",
+              type : 'line',
+              data : data.ydata,
+              itemStyle : {
+                normal : {
+                  color : '#81BF3F'
+                }
+              },
+            } ]
+          };
+
+        myChart.setOption(option);
+      }
+
+      function join(addr) {
+      $.ajax({
+          url : '/join?address='
+              +addr,
+          dataType : 'json',
+          success : joinHandler
+      });
+      
+      }
+      
+      let clickselected = null;
+      map.on('singleclick', function (e) {
+      if (clickselected !== null) {
+          myChart.setOption({});
+        clickselected = null;
+      }
+      map.forEachFeatureAtPixel(e.pixel, function (f) {
+        if (f.get('Address')==undefined)  return false;
+        clickselected = f;
+        join(f.get('Address'))
+        return false;
+      });
+    });
+   </script>
+   </body>
+</html>

@@ -57,7 +57,7 @@ if __name__ == '__main__':
         return gethcode2(row["LON"], row["LAT"], row["RADIUS_KM"])
 
     housedf = pd.read_csv('data/house.csv')
-    housedf = housedf[["LON", "LAT"]]
+    housedf = housedf[["LON", "LAT", "Address"]]
     housedf.loc[:, "hcode"] = housedf.apply(add_hcodecol, axis=1)
     housedf.to_parquet("house.index")
 

@@ -1,16 +1,16 @@
 import math
 
+import json
 import geopandas as gpd
 import pandas as pd
 from flask import Flask
 from flask import render_template
 from flask import request
-from shapely.geometry import Point
 
 
 OGC_DEGREE_TO_METERS = 6378137.0 * 2.0 * math.pi / 360
 
-app = Flask(__name__, template_folder='/Users/chenyuqiao/berkeley/w210/mids-capstone-cmbs-prop-loss/webpage/')
+app = Flask(__name__, template_folder='templates')
 
 # ol map https://openlayers.org/en/v5.3.0/examples/geojson.html
 # pip install hilbertcurve
@@ -90,7 +90,11 @@ def filter():
             hurricanelist.append(ccc)
 
     redhouse = []
+    redhouseaddr = []
+
     greenhouse = []
+    greenhouseaddr = []
+
     for index, house in housedf.iterrows():
         print('house' + str(house))
         flag = False
@@ -100,18 +104,21 @@ def filter():
                 if ccc.contains(pnt):
                     print("redhouseobject" + str(house["geometry"]))
                     redhouse.append(house["geometry"])
+                    redhouseaddr.append(house["Address"])
                     flag = True
                     break
             if flag == False:
                 print("greenhouseobject" + str(house["geometry"]))
 
                 greenhouse.append(house["geometry"])
+                greenhouseaddr.append(house["Address"])
         else:
 
             greenhouse.append(house["geometry"])
+            greenhouseaddr.append(house["Address"])
 
     print("redhouse " + str(redhouse))
-    dic = {"geometry":redhouse}
+    dic = {"geometry":redhouse,"Address":redhouseaddr}
     print("redhousedic " + str(dic))
 
     redhousedf = gpd.GeoDataFrame(dic, crs="EPSG:4326")
@@ -119,24 +126,10 @@ def filter():
     print(redhousedf)
 
     print("greenhouse " + str(greenhouse))
-    dic = {"geometry": greenhouse}
+    dic = {"geometry": greenhouse,"Address":greenhouseaddr}
     greenhousedf = gpd.GeoDataFrame(dic, crs="EPSG:4326")
     print('22222222222')
     print(greenhousedf)
-
-    #------------------------------------------------------------------------
-    polygon = yellowhurricane[0]
-    points = []
-    for vertex in polygon.exterior.coords:
-        point = Point(vertex)
-        print('point' + str(point))
-
-        points.append(point)
-
-
-    # print the list of Point objects
-    print('points' + str(points))
-    #------------------------------------------------------------------------
 
     print("yellowhurricane " + str(yellowhurricane))
     dic = {"geometry": yellowhurricane}
@@ -154,6 +147,38 @@ def filter():
     result['yellowhurricane'] = yellowhurricanedf.to_json()
 
     return result
+
+@app.route('/join')
+def join():
+    address = request.args.get('address')
+    financialdf = pd.read_csv('data/financial.csv')
+    # print(financialdf.count())
+    financialdf.query("Address=='" + address + "'", inplace=True)
+    # print(financialdf.count())
+    street = ""
+    city = ""
+    state = ""
+    xdata = []
+    ydata = []
+    for index, financial in financialdf.iterrows():
+        if len(street) < 1:
+            street = financial["Street Address"]
+        if len(city) < 1:
+            city = financial["City"]
+        if len(state) < 1:
+            state = financial["State"]
+        if  math.isnan(financial["Effective Rent"]) :
+            continue
+        xdata.append(str(financial["Year"]) + "-" + str(financial["Quarter"]))
+        ydata.append(financial["Effective Rent"])
+
+    rst = {}
+    rst['street'] = street
+    rst['city'] = city
+    rst['state'] = state
+    rst['xdata'] = xdata
+    rst['ydata'] = ydata
+    return json.dumps(rst)
 
 if __name__ == '__main__':
     app.run(debug=True)
