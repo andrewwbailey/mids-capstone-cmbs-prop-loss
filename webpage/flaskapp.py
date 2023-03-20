@@ -20,6 +20,10 @@ app = Flask(__name__, template_folder='templates')
 def home():
     return render_template('flaskapp.html')
 
+@app.route('/dev')
+def dev():
+    return render_template('dev.html')
+
 @app.route('/filter')
 def filter():
     # Read in the HOUSE index into a Pandas DataFrame 
