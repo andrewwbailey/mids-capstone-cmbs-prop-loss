@@ -1,0 +1,142 @@
+.map {
+    height: 850px;
+    width: 77%;
+}
+
+/* Search container styles */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+}
+
+/* Search input container styles */
+.search-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 0 10px;
+}
+
+/* Search input styles */
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+/* Search icon styles */
+.search-icon {
+    color: #ccc;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Clear icon styles */
+.clear-icon {
+    color: #ccc;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Hover styles for icons */
+.search-icon:hover,
+.clear-icon:hover {
+    color: #333;
+}
+
+/* Active styles for icons */
+.search-icon.active,
+.clear-icon.active {
+    color: #333;
+}
+
+/* Focus styles for input */
+.search-input:focus {
+    box-shadow: 0 0 5px #ccc;
+}
+
+.search-combobox {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.loading-icon {
+    position: relative;
+    top: 0;
+    left: 0;
+    /* width: 100%; */
+    /* height: 100%; */
+    transform: translate(50%, 250px);
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-icon::before {
+    content: "";
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 5px solid #ccc;
+    border-top-color: #333;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+.prediction-container {
+    display: grid;
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    /* height: 60px; */
+}
+
+.prediction-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 0 10px;
+}
+
+.prediction-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+#address-input {
+    width: 600px;
+    grid-column: 1 / span 2;
+}
+
+.input-require::before {
+    content: "*";
+    color: red;
+}
