@@ -126,13 +126,13 @@ def filter():
     print("redhousedic " + str(dic))
 
     redhousedf = gpd.GeoDataFrame(dic, crs="EPSG:4326")
-    print('11111111111')
+    #print('11111111111')
     print(redhousedf)
 
     print("greenhouse " + str(greenhouse))
     dic = {"geometry": greenhouse,"Address":greenhouseaddr}
     greenhousedf = gpd.GeoDataFrame(dic, crs="EPSG:4326")
-    print('22222222222')
+    #print('22222222222')
     print(greenhousedf)
 
     print("yellowhurricane " + str(yellowhurricane))
@@ -141,7 +141,7 @@ def filter():
 
     yellowhurricanedf = gpd.GeoDataFrame(dic, crs="EPSG:4326")
 
-    print('333333333333')
+    #print('333333333333')
     print(yellowhurricanedf)
 
 
