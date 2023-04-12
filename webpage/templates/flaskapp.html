@@ -2,12 +2,13 @@
 <html>
 
 <head>
-  <title>Hourse Price Prediction</title>
+  <title>Property Loss Prediction</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/ol.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/screen.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
   type="text/css">
@@ -16,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.1.2/echarts.min.js"></script>
   <style>
     body {
-      font-family: "Times New Roman", Georgia, Serif;
+      font-family: 'PT Sans Caption', sans-serif;
     }
 
     h1,
@@ -24,8 +25,9 @@
     h3,
     h4,
     h5,
-    h6 {
-      font-family: "Playfair Display";
+    h6
+     {
+      font-family: 'PT Sans Caption', sans-serif;
       letter-spacing: 5px;
     }
 
@@ -74,6 +76,19 @@
     .head {
       color: white;
     }
+    nav a.active { border-bottom: 3px solid #f7a278; }
+
+
+    .img_padding {
+      padding: 100px 100px;
+    }
+
+    .text_size {
+      font-size: 20px;
+    }
+    #address-input-container {
+      width: 608px;
+    }
   </style>
 </head>
 
@@ -96,10 +111,13 @@
   </div>
 
   <!-- Header -->
-  <header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
-    <!--<img class="w3-image" src="{{ url_for('static', filename='img/header.jpg') }}" alt="Hamburger Catering" width="1600"
-      height="800">-->
-  </header>
+  <section class="hero" style="background-image: url({{ url_for('static', filename='img/banner-main.jpg') }});" id="home">
+    <div class="inner-hero text-container">
+      <div class="hero-text-container">
+        <h1>Predicting Property Rent Loss due to Climate Physical Risk</h1>
+      </div>
+    </div>
+  </section>
 
   <!-- Page content -->
   <div class="w3-content" style="max-width:1600px">
@@ -148,8 +166,20 @@
     <h1 class="w3-center">About</h1><br>
    <div class="w3-row m6 w3-padding-large">
       <div class="test">
-        <p class="w3-large">
-        testing
+        <p class="text_size">
+        Coming out of the COVID-19 Pandemic, debt was cheap and banks were relatively loose in their lending standards. Cheap financing paired with explosive rent growth (particularly in Sun Belt markets) driven by migratory patterns, corporate relocations, and healthy consumer balance sheets brought a strong influx of capital into the Southeastern US real estate markets. Hot inflation brought forth more demand for inflation-resistant asset classes such as real estate, and with rents still ripping, capital continued to flow into real estate acquisitions. Certain markets overheated as risky investors chased entry cap rates down to unsustainable levels and relied too heavily on cheap floating rate debt and strong rent growth to pencil out returns. <br><br>
+
+Everyone wanted in on the hyper growth environment of these markets but recent shifts in monetary policy (i.e., aggressive rate hikes from the Fed to battle inflation) have highlighted the potential unfortunate outcomes from risky financing and chasing growth. Even as capital allocators are reflecting on the financial viability of their portfolios and potential investments given the macroeconomic environment, we believe that investors in the real estate sector are still overlooking a key longer-term risk factor: climate change and climate physical risk. <br><br>
+
+
+When macro factors put pressure on real estate owners’ ability to service debt, significant deviation from underwritten rental rates and growth can have meaningful implications (i.e., further straining ability to service debt in the short-term). Given trends in increased rates of climate events, we believe that prudent investors should consider the potential effects of climate physical risk when evaluating investments and sensitizing yield and returns. <br><br>
+
+
+Climate physical risk data is difficult to aggregate, analyze, and interpret using traditional financial analytic frameworks (i.e., excel modeling) given the opacity, scope, and size of the data. Investors without the resources of a data science team may have difficulty incorporating these risks into their modeling forecasts. <br><br>
+
+
+While commercial real estate investors may have loss of income covered in insurance policies, these policies are both becoming more expensive in at-risk markets and may not pay out proceeds immediately - short-term loss of income without quick repayment may put pressure on both distributable yield/return to investors and ability to cover debt without renegotiation with lenders. 
+
 
         </p>
       </div>
@@ -161,26 +191,12 @@
 <!-- Data Section -->
   <div class="w3-row w3-padding-64" id="data">
     <h1 class="w3-center">Data</h1><br>
-    <div class="w3-col m6 w3-padding-large w3-hide-small">
+    <div class="img_padding">
       <img src="{{ url_for('static', filename='img/data.jpg') }}" class="w3-round w3-image" alt="Table Setting">
     </div>
-
-    <div class="w3-col m6 w3-padding-large">
-      <div class="test">
-        <h1 class="w3-center">Data Sources</h1><br>
-        <h5 class="w3-center">Property Data</h5>
-        <p class="w3-large">Details Here</p>
-        <h5 class="w3-center">Macroeconomic Data</h5>
-        <p class="w3-large">Details Here</p>
-        <h5 class="w3-center">National Risk Index Data</h5>
-        <p class="w3-large">Details Here</p>
-        <h5 class="w3-center">Hurricane Data</h5>
-        <p class="w3-large">Details Here</p>
-      </div>
-    </div>
   </div>
-
   <hr>
+
 
 
   <!-- Approach Section -->
@@ -189,12 +205,26 @@
     <div class="w3-col l6 w3-padding-large">
       <div class="test">
         <h4>Approach</h4>
-        <p>Approach Details Here </p>
+        <p class="text_size">Our approach is to build a tool for real estate investors, lenders, and insurers that is intuitive and easy to use to analyze the potential effects of a climate event on gross rent growth for a specific property. <br><br>
+
+We believe our model produces a better ability to analyze downside cases than a traditional underwriting model given that: <br></p>
+  <ul class="text_size">
+    <li>Our model incorporates much broader/larger datasets for both macroeconomic and market data as well as climate risk and historical climate event data</li>
+    <li>Utilizes a machine learning framework to optimize prediction results</li>
+  </ul>
+
+<p class="text_size">
+When building and training our model, we focused on optimizing for highest Recall performance. Recall is defined as the ratio of “true positives” over the summation of “True positives” and “false negatives.” We chose this metrics because we believe our end users would rather be more conservative in their downside analysis than not - i.e., end users would rather have false positives (they underwrite worse outcomes than actually occur) than false negatives (they underwrite aggressively to better outcomes than actually occur). <br><br>
+
+The first version of our product focuses on predicting rent growth in the event of a hurricane exposure for multifamily properties in Florida and Texas. Our goal looking forward is to expand this tool to a broader scope of geographies, climate risk exposures, and property types. <br><br>
+
+Our final model improves on traditional underwriting from both a recall and accuracy perspective. 
+ </p>
       </div>
     </div>
 
     <div class="w3-col l6 w3-padding-large">
-      <img src="{{ url_for('static', filename='img/methodology.jpg') }}" class="w3-round w3-image" alt="Table Setting"
+       <img src="{{ url_for('static', filename='img/result.jpg') }}" class="w3-round w3-image" alt="Table Setting"
         width="900" height="770">
       <br>
       <br>
@@ -210,9 +240,18 @@
   <!-- Historical Hurricane -->
   <div class="w3-row w3-padding-64" id="hurricane">
     <h1 class="w3-center">Historical Hurricane</h1><br>
+    <p class = "w3-padding w3-center"> The training data, which is visualized on the map, spans the years 2001 to 2022 </p>
+
     <div class="search-container">
       <div class="search-input-container">
-        <input type="text" class="search-input" placeholder="Year">
+        <select class="search-input">
+          <option value="">Year</option>
+          <script>
+            for (var i = 2001; i <= 2022; i++) {
+              document.write("<option value='" + i + "'>" + i + "</option>");
+            }
+          </script>
+        </select>
         <i class="fa fa-times clear-icon" style="display: none;"></i>
         <i class="fa fa-search search-icon"></i>
         <select class="search-combobox">
@@ -231,24 +270,18 @@
   <!-- Prediction Section -->
   <div class="w3-row w3-padding-64" id="prediction">
     <h1 class="w3-center">Prediction</h1><br>
-
+    <p class = "w3-padding w3-center"> Please fill in all boxes marked with a red star, as they are required fields for making a prediction </p>
     <div class="prediction-container">
-      <div class="prediction-input-container input-require" id="address-input">
-        <input type="text" class="prediction-input" placeholder="Address">
+      <div class="prediction-input-container input-require" id="address-input-container">
+        <input type="text" class="prediction-input" id="address-input" placeholder="Address">
       </div>
       <div class="prediction-input-container input-require">
-        <font color="#666">$</font><input type="text" class="prediction-input" placeholder="Effective Rent">
+        $</font><input type="text" class="prediction-input" placeholder="Effective Rent">
       </div>
+
       <div class="prediction-input-container input-require">
-        <input type="text" class="prediction-input" placeholder="Occupancy">
-      </div>
-      <div class="prediction-input-container">
-        <input type="text" class="prediction-input" placeholder="USA GUST">
-      </div>
-      <div class="prediction-input-container">
         <!-- <input type="text" class="prediction-input" placeholder="Q1 V"> -->
         <font color="#666">Quarter</font>
-
         <select class="search-combobox">
           <option value="1">Q1</option>
           <option value="2">Q2</option>
@@ -256,20 +289,73 @@
           <option value="4">Q4</option>
         </select>
       </div>
+
       <div class="prediction-input-container">
-        <input type="text" class="prediction-input" placeholder="USA Wind">
+        <label for="occupancy-input" style="color: #666;">Occupancy </label>
+        <input type="range" id="occupancy-input" class="prediction-input" min="1" max="100" value="50" oninput="updateOccupancyValue(this.value);">
+        <span id="occupancy-value">50%</span>
       </div>
+
+      <script>
+        function updateOccupancyValue(value) {
+          var valueSpan = document.getElementById("occupancy-value");
+          valueSpan.textContent = value + "%";
+        }
+      </script>
+      <div class="prediction-input-container">
+        <label for="gust-input" style="color: #666;">Gust </label>
+        <input type="range" id="gust-input" class="prediction-input" min="0" max="150" value="75" oninput="updateGustValue(this.value);">
+        <span id="gust-value">75 knots</span>
+        <div class="gust-description"></div>
+      </div>
+
+      <script>
+        function updateGustValue(value) {
+          var valueSpan = document.getElementById("gust-value");
+          valueSpan.textContent = value + " knots";
+
+          var descriptionDiv = document.querySelector('.gust-description');
+          if (value >= 0 && value <= 36) {
+            descriptionDiv.innerHTML = ' Safe Wind';
+          } else if (value >= 37 && value <= 45) {
+            descriptionDiv.innerHTML = ' Strong Wind';
+          } else if (value >= 46 && value <= 65) {
+            descriptionDiv.innerHTML = ' Gale Force';
+          } else if (value >= 66 && value <= 88) {
+            descriptionDiv.innerHTML = ' Storm Force';
+          } else if (value >= 89) {
+            descriptionDiv.innerHTML = ' Hurricane Force';
+          }
+        }
+        
+        // Set default value to 75 and show "Storm Force" warning description
+        var defaultGustValue = 75;
+        updateGustValue(defaultGustValue);
+      </script>
+      <div class="prediction-input-container">
+        <label for="wind-input" style="color: #666;">Wind </label>
+        <input type="range" id="wind-input" class="prediction-input" min="0" max="300" value="150" oninput="updateWindValue(this.value);">
+        <span id="wind-value">150 knots</span>
+      </div>
+
+      <script>
+        function updateWindValue(value) {
+          var valueSpan = document.getElementById("wind-value");
+          valueSpan.textContent = value + " knots";
+        }
+      </script>
       <div class="prediction-input-container">
         <!-- <input type="text" class="prediction-input" placeholder="USA_SSHS V"> -->
-        <font color="#666">USA SSHS</font>
+        <font color="#666">Hurricane Category</font>
         <select class="search-combobox">
-          <option value="1">1</option>
+          <option value="1">1 Lowest</option>
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
-          <option value="4">5</option>
+          <option value="4">5 Highest</option>
         </select>
       </div>
+
     </div>
     <div class="w3-center w3-padding-64">
       <input type="submit" value="Submit" class="button">
@@ -279,6 +365,10 @@
   <script src="{{ url_for('static', filename='js/map.js') }}"></script>
   <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
   <script src="{{ url_for('static', filename='js/searchui.js') }}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6jFKVJNv0E3a4pt1MAf9euD_lFWtqy6w&libraries=places"></script>
+  <script src="{{ url_for('static', filename='js/place.js') }}"></script>
+
+
 </body>
 
 </html>

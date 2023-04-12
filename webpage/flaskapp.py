@@ -155,6 +155,8 @@ def filter():
 @app.route('/join')
 def join():
     address = request.args.get('address')
+    year = int(request.args.get('year','0'))
+    quarter = int(request.args.get('quarter','0'))
     financialdf = pd.read_csv('data/financial.csv')
     # print(financialdf.count())
     financialdf.query("Address=='" + address + "'", inplace=True)
@@ -173,8 +175,9 @@ def join():
             state = financial["State"]
         if  math.isnan(financial["Effective Rent"]) :
             continue
-        xdata.append(str(financial["Year"]) + "-" + str(financial["Quarter"]))
-        ydata.append(financial["Effective Rent"])
+        if financial["Year"] > year or (financial["Year"] == year and financial["Quarter"] >= quarter):
+            xdata.append(str(financial["Year"]) + "-" + str(financial["Quarter"]))
+            ydata.append(financial["Effective Rent"])
 
     rst = {}
     rst['street'] = street

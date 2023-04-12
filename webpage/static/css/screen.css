@@ -1,0 +1,224 @@
+.hero,
+.nonhero {
+    color: #ffffff;
+    text-align: center;
+    height: 100vh;
+    min-height: 550px;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+}
+
+.hero:before,
+.nonhero:before {
+    content: "";
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95) 0, rgba(0, 0, 0, 0.3) 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+.hero p,
+.nonhero p {
+    color: #fff;
+}
+
+.hero .inner-hero,
+.nonhero .inner-hero {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.hero .hero-text-container,
+.nonhero .hero-text-container {
+    width: 620px;
+    text-align: left;
+    top-margin: 100px;
+}
+
+.hero .hero-text-container h1,
+.hero .hero-text-container h2,
+.hero .hero-text-container p,
+.nonhero .hero-text-container h1,
+.nonhero .hero-text-container h2,
+.nonhero .hero-text-container p {
+    text-shadow: 1px 1px 1px black;
+}
+
+.hero .hero-text-right,
+.nonhero .hero-text-right {
+    position: absolute;
+    right: 0;
+}
+
+.nonhero {
+    height: auto;
+    min-height: 45vh;
+    position: relative;
+}
+
+.nonhero:before {
+    height: auto;
+}
+
+.nonhero div {
+    padding: 55px 8px 2px 8px;
+}
+
+.image {
+    text-align: center;
+}
+
+.bottom-cta {
+    text-align: center;
+}
+
+.bottom-cta h2 {
+    margin-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+    .flex {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flexbox;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+    }
+
+    .flex .text,
+    .flex .image {
+        -webkit-flex: 1;
+        flex: 1;
+        padding: 0 20px;
+    }
+
+    .content section:nth-child(even) .flex {
+        flex-direction: row-reverse;
+    }
+}
+
+figcaption {
+    display: block;
+    padding: 4px;
+}
+
+figure {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.container,
+.text-container {
+    margin: 0 auto;
+    position: relative;
+    padding: 0 20px;
+}
+
+.text-container {
+    max-width: 750px;
+}
+
+.container {
+    max-width: 1140px;
+}
+
+.dark-logo {
+    display: none;
+}
+
+section {
+    background: #fff;
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0);
+    color: #fff;
+    padding: 10px 0 3px;
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+    line-height: 0;
+}
+
+header .container {
+    line-height: 0;
+}
+
+header.header-background {
+    background-color: rgba(255, 255, 255, 0.97);
+    color: #333;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease;
+    text-shadow: none;
+}
+
+header.header-background a {
+    color: #333;
+}
+
+@media (min-width: 680px) {
+    header.header-background a:hover {
+        border-bottom-color: rgba(80, 80, 80, 0.3);
+        border-bottom-width: 3px;
+    }
+}
+
+header.header-background .navextra {
+    color: #333;
+}
+
+header.header-background .dark-logo {
+    display: inline;
+}
+
+header.header-background .light-logo {
+    display: none;
+}
+
+header a,
+header .navextra {
+    color: #fff;
+    text-decoration: none;
+    z-index: 1;
+    position: relative;
+    display: block;
+}
+
+@media (min-width: 680px) {
+
+    header a,
+    header .navextra {
+        height: 100%;
+    }
+}
+
+header a span,
+header .navextra span {
+    display: block;
+    height: 100%;
+}
+
+header a:hover,
+header .navextra:hover {
+    text-decoration: none;
+}
+
+header .company-name {
+    font-size: 1.7em;
+    display: inline-block;
+}
+
+header .company-name img {
+    height: 45px;
+    width: auto;
+}
