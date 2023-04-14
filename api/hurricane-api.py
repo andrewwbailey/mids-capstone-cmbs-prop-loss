@@ -22,7 +22,7 @@ app = FastAPI()
 # address, rent, quarter, occupancy, gust, wind, hurricanecat
 
 
-@app.post("/predict")
+@app.get("/predict")
 def predict(address: str, rent: float, quarter: int, occupancy: int, gust: float, wind: float, hurricanecat: int):
     # random for now
     random_predict = random.randrange(3)
