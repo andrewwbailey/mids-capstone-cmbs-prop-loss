@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from sklearn.pipeline import Pipeline
 from joblib import dump, load
 
-estimator = load("best_rf_final.joblib")
+estimator = load("best_rf_tuned.joblib")
 
 app = FastAPI()
 
@@ -45,9 +45,8 @@ def heartbeat():
 def input_to_df(address, rent, quarter, occupancy, gust, wind, hurricanecat):
     input_data = {'USA_WIND': [wind], 
         'USA_GUST': [gust], 
-        'USA_SSHS': [hurricanecat], 
+        'storm_category': [hurricanecat], 
         'effective_rent': [rent], 
-        'expose_status_code': [1], 
         'zip': ['32818'], 
         'occupancy': [occupancy], 
         'prop_rent_growth': [0.007035],
@@ -60,3 +59,9 @@ def input_to_df(address, rent, quarter, occupancy, gust, wind, hurricanecat):
     data_df = pd.DataFrame.from_dict(input_data, orient='columns')
 
     return data_df
+
+def get_rent_growth(address):
+    x = x
+
+def get_risk_scores(address):
+    y = y
