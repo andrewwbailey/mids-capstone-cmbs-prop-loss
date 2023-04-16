@@ -385,6 +385,7 @@ Our final model improves on traditional underwriting from both a recall and accu
         }
           // Add event listener to hurricane category dropdown
         var hurricaneCatInput = document.getElementById("hurricanecat-input");
+        hurricaneCatInput.addEventListener("change", updateGustValue);
         hurricaneCatInput.addEventListener("change", updateGustRange);
       </script>
       <div class="prediction-input-container">
@@ -447,6 +448,7 @@ Our final model improves on traditional underwriting from both a recall and accu
         // updateWindValue(150);
         // Add event listener to hurricane category dropdown
         var hurricaneCatInput = document.getElementById("hurricanecat-input");
+        hurricaneCatInput.addEventListener("change", updateWindValue);
         hurricaneCatInput.addEventListener("change", updateWindRange);
       </script>
 
