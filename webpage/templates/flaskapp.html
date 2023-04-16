@@ -276,13 +276,13 @@ Our final model improves on traditional underwriting from both a recall and accu
         <input type="text" class="prediction-input" id="address-input" placeholder="Address">
       </div>
       <div class="prediction-input-container input-require">
-        $</font><input type="text" class="prediction-input" placeholder="Effective Rent">
+        $</font><input type="text" class="prediction-input" placeholder="Effective Rent" id="rent-input">
       </div>
 
       <div class="prediction-input-container input-require">
         <!-- <input type="text" class="prediction-input" placeholder="Q1 V"> -->
         <font color="#666">Quarter</font>
-        <select class="search-combobox">
+        <select class="search-combobox" id='quarter-input'>
           <option value="1">Q1</option>
           <option value="2">Q2</option>
           <option value="3">Q3</option>
@@ -347,7 +347,7 @@ Our final model improves on traditional underwriting from both a recall and accu
       <div class="prediction-input-container">
         <!-- <input type="text" class="prediction-input" placeholder="USA_SSHS V"> -->
         <font color="#666">Hurricane Category</font>
-        <select class="search-combobox">
+        <select class="search-combobox" id="hurricanecat-input">
           <option value="1">1 Lowest</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -358,9 +358,63 @@ Our final model improves on traditional underwriting from both a recall and accu
 
     </div>
     <div class="w3-center w3-padding-64">
-      <input type="submit" value="Submit" class="button">
+      <input type="submit" value="Submit" onclick="predict()" class="button">
     </div>
+    <div class="loading-icon" style="display: none;"></div>
+    <div id="prediction-message" style="text-align: center;"></div>
   </div>
+
+  <script>
+    function predict() {
+      var address = document.getElementById('address-input');
+      var rent = document.getElementById('rent-input');
+      var quarter = document.getElementById('quarter-input');
+      var occupancy = document.getElementById('occupancy-input');
+      var wind = document.getElementById('wind-input');
+      var gust = document.getElementById('gust-input');
+      var hurricanecat = document.getElementById('hurricanecat-input');
+      var message = document.getElementById("prediction-message");
+      if (address.value.trim() === '') {
+        message.innerHTML = 'Please fill in all the required fields (Address, Effective Rent, Quarter)';
+      } else if (rent.value.trim() === '') {
+        message.innerHTML = 'Please fill in all the required fields (Address, Effective Rent, Quarter)';
+      } else if (quarter.value.trim() === '') {
+        message.innerHTML = 'Please fill in all the required fields (Address, Effective Rent, Quarter)';
+      } else {
+        message.innerHTML = '';
+        var url = '/predict?'
+                  + 'address=' + address.value.trim()
+                  + '&rent=' + rent.value.trim()
+                  + '&quarter=' + quarter.value.trim()
+                  + '&occupancy=' + occupancy.value.trim()
+                  + '&gust=' + gust.value.trim()
+                  + '&wind=' + wind.value.trim()
+                  + '&hurricanecat=' + hurricanecat.value.trim();
+        $.ajax({
+          url: url, // replace with your API endpoint
+          type: 'GET',
+          dataType: 'json',
+          mode: 'cors',
+          headers: { "Access-Control-Allow-Origin": "*" },
+          success: function(data) {
+            // handle successful response
+            console.log(data['prediction']);
+            if (data['prediction'] === 0) {
+              message.innerHTML = 'Quarter over Quarter Rent growth expected to be above underwriting ( > 3.5% annualized)'
+            } else if (data['prediction'] === 1) {
+              message.innerHTML = 'Quarter over Quarter Rent growth expected to be in line underwriting ( 2.5-3.5% annualized)'
+            } else if (data['prediction'] === 2) {
+              message.innerHTML = 'Quarter over Quarter Rent growth expected to be below underwriting ( < 2.5% annualized)'
+            }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // handle error response
+            console.log(textStatus + ': ' + errorThrown);
+          }
+        });
+      }
+    }
+  </script>
 
   <script src="{{ url_for('static', filename='js/map.js') }}"></script>
   <script src="{{ url_for('static', filename='js/chart.js') }}"></script>

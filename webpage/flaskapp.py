@@ -6,6 +6,9 @@ import pandas as pd
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import redirect
+import requests
+from urllib.parse import urlencode
 
 
 OGC_DEGREE_TO_METERS = 6378137.0 * 2.0 * math.pi / 360
@@ -186,6 +189,14 @@ def join():
     rst['xdata'] = xdata
     rst['ydata'] = ydata
     return json.dumps(rst)
+
+@app.route('/predict')
+def predict():
+    query_string = urlencode(request.args)
+    url = 'http://ec2-3-87-223-33.compute-1.amazonaws.com:8000/predict?' + query_string
+    print(url)
+    response = requests.get(url)
+    return response.json()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
