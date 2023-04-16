@@ -391,7 +391,7 @@ Our final model improves on traditional underwriting from both a recall and accu
                   + '&wind=' + wind.value.trim()
                   + '&hurricanecat=' + hurricanecat.value.trim();
         $.ajax({
-          url: url, // replace with your API endpoint
+          url: url,
           type: 'GET',
           dataType: 'json',
           mode: 'cors',
@@ -408,7 +408,6 @@ Our final model improves on traditional underwriting from both a recall and accu
             }
           },
           error: function(jqXHR, textStatus, errorThrown) {
-            // handle error response
             console.log(textStatus + ': ' + errorThrown);
           }
         });
