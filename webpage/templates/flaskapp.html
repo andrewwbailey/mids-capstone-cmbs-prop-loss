@@ -291,6 +291,17 @@ Our final model improves on traditional underwriting from both a recall and accu
       </div>
 
       <div class="prediction-input-container">
+        <!-- <input type="text" class="prediction-input" placeholder="USA_SSHS V"> -->
+        <font color="#666">Hurricane Category</font>
+        <select class="search-combobox" id="hurricanecat-input">
+          <option value="1">1 Lowest</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5 Highest</option>
+        </select>
+      </div>
+      <div class="prediction-input-container">
         <label for="occupancy-input" style="color: #666;">Occupancy </label>
         <input type="range" id="occupancy-input" class="prediction-input" min="1" max="100" value="50" oninput="updateOccupancyValue(this.value);">
         <span id="occupancy-value">50%</span>
@@ -304,15 +315,51 @@ Our final model improves on traditional underwriting from both a recall and accu
       </script>
       <div class="prediction-input-container">
         <label for="gust-input" style="color: #666;">Gust </label>
-        <input type="range" id="gust-input" class="prediction-input" min="0" max="150" value="75" oninput="updateGustValue(this.value);">
-        <span id="gust-value">75 knots</span>
+        <input type="range" id="gust-input" class="prediction-input" min="0" max="175" value="150" oninput="updateGustValue(this.value);">
+        <span id="gust-value">150 knots</span>
         <div class="gust-description"></div>
+
       </div>
 
       <script>
         function updateGustValue(value) {
           var valueSpan = document.getElementById("gust-value");
-          valueSpan.textContent = value + " knots";
+
+          // Get the selected hurricane category level
+          var hurricaneCatInput = document.getElementById("hurricanecat-input");
+          var hurricaneCatLevel = parseInt(hurricaneCatInput.value);
+
+          // Set the limits for the gust bar based on the selected hurricane category level
+          var minGust = 0;
+          var maxGust = 300;
+          if (hurricaneCatLevel === 1) {
+            minGust = 80;
+            maxGust = 110;
+          } else if (hurricaneCatLevel === 2) {
+            minGust = 110;
+            maxGust = 115;
+          } else if (hurricaneCatLevel === 3) {
+            minGust = 115;
+            maxGust = 135;
+          } else if (hurricaneCatLevel === 4) {
+            minGust = 140;
+            maxGust = 155;
+          } else if (hurricaneCatLevel === 5) {
+            minGust = 155;
+            maxGust = 175;
+          }
+
+          // Set the range slider limits
+          var gustInput = document.getElementById("gust-input");
+          gustInput.min = minGust;
+          gustInput.max = maxGust;
+
+          // Convert the gust speed from knots to mph
+          var mphValue = Math.round(value * 1.15078);
+
+          // Update the gust bar value and display
+          gustInput.value = value < minGust ? minGust : value > maxGust ? maxGust : value;
+          valueSpan.textContent = mphValue + " mph";
 
           var descriptionDiv = document.querySelector('.gust-description');
           if (value >= 0 && value <= 36) {
@@ -327,10 +374,18 @@ Our final model improves on traditional underwriting from both a recall and accu
             descriptionDiv.innerHTML = ' Hurricane Force';
           }
         }
-        
-        // Set default value to 75 and show "Storm Force" warning description
-        var defaultGustValue = 75;
-        updateGustValue(defaultGustValue);
+
+        function updateGustRange() {
+          // Get the gust bar value
+          var gustInput = document.getElementById("gust-input");
+          var value = parseInt(gustInput.value);
+
+          // Update the gust bar limits and value
+          updateGustValue(value);
+        }
+          // Add event listener to hurricane category dropdown
+        var hurricaneCatInput = document.getElementById("hurricanecat-input");
+        hurricaneCatInput.addEventListener("change", updateGustRange);
       </script>
       <div class="prediction-input-container">
         <label for="wind-input" style="color: #666;">Wind </label>
@@ -341,26 +396,64 @@ Our final model improves on traditional underwriting from both a recall and accu
       <script>
         function updateWindValue(value) {
           var valueSpan = document.getElementById("wind-value");
-          valueSpan.textContent = value + " knots";
+
+          // Get the selected hurricane category level
+          var hurricaneCatInput = document.getElementById("hurricanecat-input");
+          var hurricaneCatLevel = parseInt(hurricaneCatInput.value);
+
+          // Set the limits for the wind drag bar based on the selected hurricane category level
+          var minWind = 0;
+          var maxWind = 300;
+          if (hurricaneCatLevel === 1) {
+            minWind = 64;
+            maxWind = 82;
+          } else if (hurricaneCatLevel === 2) {
+            minWind = 83;
+            maxWind = 95;
+          } else if (hurricaneCatLevel === 3) {
+            minWind = 96;
+            maxWind = 112;
+          } else if (hurricaneCatLevel === 4) {
+            minWind = 113;
+            maxWind = 136;
+          } else if (hurricaneCatLevel === 5) {
+            minWind = 137;
+            maxWind = 150;
+          }
+
+          // Set the range slider limits
+          var windInput = document.getElementById("wind-input");
+          windInput.min = minWind;
+          windInput.max = maxWind;
+
+          // Convert the wind speed from knots to mph
+          var mphValue = Math.round(value * 1.15078);
+
+          // Update the wind drag bar value and display
+          windInput.value = value < minWind ? minWind : value > maxWind ? maxWind : value;
+          valueSpan.textContent = mphValue + " mph";
         }
+
+        function updateWindRange() {
+          // Get the wind drag bar value
+          var windInput = document.getElementById("wind-input");
+          var value = parseInt(windInput.value);
+
+          // Update the wind drag bar limits and value
+          updateWindValue(value);
+        }
+
+        // Set the initial wind drag bar limits and value
+        // updateWindValue(150);
+        // Add event listener to hurricane category dropdown
+        var hurricaneCatInput = document.getElementById("hurricanecat-input");
+        hurricaneCatInput.addEventListener("change", updateWindRange);
       </script>
-      <div class="prediction-input-container">
-        <!-- <input type="text" class="prediction-input" placeholder="USA_SSHS V"> -->
-        <font color="#666">Hurricane Category</font>
-        <select class="search-combobox" id="hurricanecat-input">
-          <option value="1">1 Lowest</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="4">5 Highest</option>
-        </select>
-      </div>
 
     </div>
     <div class="w3-center w3-padding-64">
       <input type="submit" value="Submit" onclick="predict()" class="button">
     </div>
-    <div class="loading-icon" style="display: none;"></div>
     <div id="prediction-message" style="text-align: center;"></div>
   </div>
 
