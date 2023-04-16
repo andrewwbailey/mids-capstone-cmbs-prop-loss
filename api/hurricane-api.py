@@ -15,17 +15,17 @@ app = FastAPI()
 Model Parameter to User Input Mapping
 'USA_WIND' --> wind
 'USA_GUST' --> gust
-'USA_SSHS' --> hurricanecat
+'storm_category' --> hurricanecat
 'effective_rent' --> rent
-'expose_status_code'
-'zip' 
+'zip' -- [come from address]
 'occupancy' --> occupancy
-'prop_rent_growth',
-'sma_rent_growth' ?
-'distance_from_coast' ?
-'RISK_SCORE' ?
-'CFLD_RISKS', ?
-'HRCN_RISKS' ?
+'prop_rent_growth' [property rent growth - lookup from file - final_rent_data.csv]
+** if you can't find prop rent growth, default to sma **
+'sma_rent_growth' [SMA Stabilzed Market Rent: markets rent growth where property resides - lookup from file - macro_data.csv]
+'distance_from_coast' [distance_from_coast]
+'RISK_SCORE' [FEMA designated risk score - lookup from file - NRI_Table_Counties.csv]
+'CFLD_RISKS', [Coastal flood risk - lookup from file - NRI_Table_Counties.csv]
+'HRCN_RISKS' [Hurricane flood risk - lookup from file - NRI_Table_Counties.csv]
 'quarter_num' --> quarter """
 
 
