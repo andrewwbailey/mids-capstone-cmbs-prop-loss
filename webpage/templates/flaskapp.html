@@ -283,6 +283,8 @@ Our final model improves on traditional underwriting from both a recall and accu
             var addresses = {{ addresses|tojson }};
             $("#address-input").autocomplete({
                 source: addresses,
+                delay: 100,
+                minLength: 3,
                 messages: {
                     noResults: '',
                     results: function() {}

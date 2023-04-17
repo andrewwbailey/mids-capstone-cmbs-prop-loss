@@ -7,6 +7,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
+from flask_caching import Cache
 import requests
 from urllib.parse import urlencode
 import csv
@@ -16,21 +17,28 @@ import csv
 OGC_DEGREE_TO_METERS = 6378137.0 * 2.0 * math.pi / 360
 
 app = Flask(__name__, template_folder='templates')
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 # ol map https://openlayers.org/en/v5.3.0/examples/geojson.html
 # pip install hilbertcurve
 # pip install parquet
 
-@app.route('/')
-def home():
+@cache.cached(timeout=3600)  # Cache for 1 hour
+def get_addresses():
     with open('data/rent_data_with_location.csv', 'r') as file:
         reader = csv.DictReader(file)
         addresses = set()
         for row in reader:
             addresses.add(row['address'])
-    addresses = list(addresses)
-    #print("Addresses" + str(addresses[0]))
-    #print("Addresses" + str(addresses[1]))
+    return list(addresses)
+
+
+@app.route('/')
+def home():
+    # Get addresses from cache
+    addresses = get_addresses()
+    print("Addresses" + str(addresses[0]))
+    print("Addresses" + str(addresses[1]))
 
     return render_template('flaskapp.html', addresses=addresses)
 
