@@ -9,6 +9,8 @@ from flask import request
 from flask import redirect
 import requests
 from urllib.parse import urlencode
+import csv
+
 
 
 OGC_DEGREE_TO_METERS = 6378137.0 * 2.0 * math.pi / 360
@@ -21,7 +23,17 @@ app = Flask(__name__, template_folder='templates')
 
 @app.route('/')
 def home():
-    return render_template('flaskapp.html')
+    with open('data/rent_data_with_location.csv', 'r') as file:
+        reader = csv.DictReader(file)
+        addresses = set()
+        for row in reader:
+            addresses.add(row['address'])
+    addresses = list(addresses)
+    #print("Addresses" + str(addresses[0]))
+    #print("Addresses" + str(addresses[1]))
+
+    return render_template('flaskapp.html', addresses=addresses)
+
 
 @app.route('/dev')
 def dev():
