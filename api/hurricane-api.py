@@ -34,7 +34,7 @@ Model Parameter to User Input Mapping
 'HRCN_RISKS' [Hurricane flood risk - lookup from file - NRI_Table_Counties.csv]
 'quarter_num' --> quarter """
 
-
+# Routing
 @app.get("/predict")
 def predict(address: str, rent: float, quarter: int, occupancy: int, gust: float, wind: float, hurricanecat: int):
     predict_rec = input_to_df(address, rent, quarter, occupancy, gust, wind, hurricanecat)
@@ -46,6 +46,8 @@ def predict(address: str, rent: float, quarter: int, occupancy: int, gust: float
 @app.get("/heartbeat")
 def heartbeat():
     return "Online"
+
+# Support functions
 
 def input_to_df(address, rent, quarter, occupancy, gust, wind, hurricanecat):
     zipcode = get_loc_info(address)
