@@ -23,7 +23,7 @@ Model Parameter to User Input Mapping
 'USA_GUST' --> gust
 'storm_category' --> hurricanecat
 'effective_rent' --> rent
-'zip' -- [come from address]
+'zip' --> geocode(address)
 'occupancy' --> occupancy
 'prop_rent_growth' [property rent growth - lookup from file - final_rent_data.csv]
 ** if you can't find prop rent growth, default to sma **
@@ -37,7 +37,6 @@ Model Parameter to User Input Mapping
 
 @app.get("/predict")
 def predict(address: str, rent: float, quarter: int, occupancy: int, gust: float, wind: float, hurricanecat: int):
-    # random for now
     predict_rec = input_to_df(address, rent, quarter, occupancy, gust, wind, hurricanecat)
     print(predict_rec)
     prediction = estimator.predict(predict_rec)
@@ -49,16 +48,18 @@ def heartbeat():
     return "Online"
 
 def input_to_df(address, rent, quarter, occupancy, gust, wind, hurricanecat):
-    risk_scores = get_risk_scores(address)
+    zipcode = get_loc_info(address)
+    risk_scores = get_risk_scores(zipcode)
+    rent_growth = get_rent_growth(address)
     
     input_data = {'USA_WIND': [wind], 
         'USA_GUST': [gust], 
         'storm_category': [hurricanecat], 
         'effective_rent': [rent], 
-        'zip': ['32818'], 
+        'zip': [str(zipcode)], 
         'occupancy': [occupancy], 
-        'prop_rent_growth': [0.007035],
-        'sma_rent_growth': [0.008267], 
+        'prop_rent_growth': [rent_growth['prop_rent_growth']],
+        'sma_rent_growth': [rent_growth['sma_rent_growth']], 
         'distance_from_coast': [75.76417], 
         'RISK_SCORE': [risk_scores['risk_score']], 
         'CFLD_RISKS': [risk_scores['cfld_risks']],
@@ -69,11 +70,19 @@ def input_to_df(address, rent, quarter, occupancy, gust, wind, hurricanecat):
     return data_df
 
 def get_rent_growth(address):
-    x = x
+    rent_growth = {}
+    lookup_rent_df = pd.read_csv('lookup_rent_growth.csv')
+    lookup_rent_df = lookup_rent_df.sort_values('quarter_x', ascending=False)
+    lookup_rent_df = lookup_rent_df[lookup_rent_df['address'] == address]
+    lookup_rent_rec = lookup_rent_df.iloc[0]
+    print(lookup_rent_rec)
+    rent_growth['prop_rent_growth'] = lookup_rent_rec['historic_rent_growth_prop']
+    rent_growth['sma_rent_growth'] = lookup_rent_rec['historic_rent_growth_sma']
 
-def get_risk_scores(address):
+    return rent_growth
+
+def get_risk_scores(zipcode):
     risk_scores = {}
-    zipcode = get_loc_info(address)
     risk_rec = lookup_risk_df[lookup_risk_df['ZIP'] == zipcode]
     print(risk_rec)
     risk_scores['risk_score'] = risk_rec['RISK_SCORE'].iloc[0] if not math.isnan(risk_rec['RISK_SCORE'].iloc[0]) else 0.0
