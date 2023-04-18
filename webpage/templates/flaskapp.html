@@ -291,8 +291,50 @@ Our final model improves on traditional underwriting from both a recall and accu
                 },
                 open: function(event, ui) {
                     $('.ui-autocomplete').css('z-index', 9999);
+                },
+                select: function(event, ui) {
+                    // Use the ui.item.value property to get the full selected address
+                    var selectedAddress = ui.item.value;
+                    $('#address-input').val(selectedAddress);
+
+                    // Call the refreshRent() function when an address is selected
+                    refreshRent();
                 }
             });
+
+            $('#zip-checkbox').on('change', function() {
+                // Call the refreshRent() function when the checkbox is changed
+                refreshRent();
+            });
+
+            function refreshRent() {
+                var address = $('#address-input').val();
+                if ($('#zip-checkbox').is(':checked')) {
+                        // Extract the ZIP code from the address
+                        console.log(address);
+                        var zipcode = address.trim().substr(-5);
+
+                        // Call the get_zip_rent endpoint with the extracted ZIP code
+                        $.ajax({
+                            url: '/get_zip_rent',
+                            type: 'POST',
+                            data: {zip_code: zipcode},
+                            success: function(response) {
+                                $('#rent-input').val(response.effective_rent);
+                            }
+                        });
+                } else {
+                    // When the zip-checkbox is not checked, make an AJAX request to get the rent for the address
+                    $.ajax({
+                        url: '/get_rent',
+                        type: 'POST',
+                        data: {address: address},
+                        success: function(response) {
+                            $('#rent-input').val(response.rent);
+                        }
+                    });
+                }
+            }
         });
       </script>
       <style>
@@ -339,7 +381,9 @@ Our final model improves on traditional underwriting from both a recall and accu
       </style>
 
       <div class="prediction-input-container input-require">
-        $</font><input type="text" class="prediction-input" placeholder="Effective Rent" id="rent-input">
+          $<input type="text" class="prediction-input" placeholder="Effective Rent" id="rent-input">
+          <label for="zip-checkbox">ZIP Avg</label>
+          <input type="checkbox" id="zip-checkbox" name="zip-checkbox">
       </div>
 
       <div class="prediction-input-container input-require">

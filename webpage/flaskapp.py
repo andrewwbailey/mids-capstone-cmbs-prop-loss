@@ -8,6 +8,8 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask_caching import Cache
+from flask import jsonify, request
+
 import requests
 from urllib.parse import urlencode
 import csv
@@ -25,7 +27,7 @@ cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 @cache.cached(timeout=3600)  # Cache for 1 hour
 def get_addresses():
-    with open('data/rent_data_with_location.csv', 'r') as file:
+    with open('data/effective_rent_by_address.csv', 'r') as file:
         reader = csv.DictReader(file)
         addresses = set()
         for row in reader:
@@ -42,6 +44,63 @@ def home():
 
     return render_template('flaskapp.html', addresses=addresses)
 
+
+address_rent_cache = {}
+
+@app.route('/get_rent', methods=['POST'])
+def get_rent():
+    address = request.form['address']
+    print("addressToGetRent" + str(address))
+
+    # Check if the rent for the address is in the cache
+    if address in address_rent_cache:
+        rent = address_rent_cache[address]
+    else:
+        # Search for the rent for the selected address in the CSV file
+        with open('data/effective_rent_by_address.csv', 'r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row['address'] == address:
+                    rent = row['effective_rent']
+                    print("Rent!!!" + rent)
+                    break
+            else:
+                print("No Rent Found!!!")
+                rent = ''
+        
+        # Add the address rent to the cache
+        address_rent_cache[address] = rent
+
+    return jsonify({'rent': rent})
+
+zip_rent_cache = {}
+
+@app.route('/get_zip_rent', methods=['POST'])
+def get_zip_rent():
+    zip_code = request.form['zip_code']
+    print("ZIPCODE!!" + zip_code)
+    
+    # Check if the rent for the zip code is in the cache
+    if zip_code in zip_rent_cache:
+        effective_rent = zip_rent_cache[zip_code]
+    else:
+        # Search for the effective rent for the zip code in the CSV file
+        with open('data/average_rent_by_zip.csv', 'r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row['zip'] == zip_code:
+                    print("ZIP effective_rent!" + str(row['effective_rent']))
+                    effective_rent = round(float(row['effective_rent']))
+                    print("ZIP effective_rent! After rounding " + str(effective_rent))
+
+                    break
+            else:
+                effective_rent = ''
+        
+        # Add the zip code rent to the cache
+        zip_rent_cache[zip_code] = effective_rent
+
+    return jsonify({'effective_rent': effective_rent})
 
 @app.route('/dev')
 def dev():
